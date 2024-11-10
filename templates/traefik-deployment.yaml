@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: traefik
+    app.kubernetes.io/instance: devmoydom-default
+    app.kubernetes.io/version: "v3.2.0"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: traefik
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: traefik
+    spec:
+      containers:
+        - name: traefik
+          image: traefik:v3.2.0
+          ports:
+            - name: web
+              containerPort: 80
+              protocol: "TCP"
+            - name: traefik
+              containerPort: 9000
+              protocol: "TCP"
+            - name: websecure
+              containerPort: 443
+              protocol: "TCP"
+          args:
+            - "--api.insecure=true"  # Включает dashboard
+            - "--providers.kubernetesingress=true"  # Включает поддержку Ingress
+            - "--entrypoints.traefik.address=:9000/tcp"
+            - "--entrypoints.web.address=:80/tcp"  # Определяет entrypoint для HTTP
+            - "--entrypoints.websecure.address=:443/tcp"  # Определяет entrypoint для HTTPS (если будет настройка в будущем)
