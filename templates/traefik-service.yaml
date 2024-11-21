@@ -1,15 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: traefik
-  namespace: kube-system
+  name: traefik-def
+  namespace: default
   labels:
-    app.kubernetes.io/name: traefik
-    app.kubernetes.io/instance: traefik
+    app.kubernetes.io/name: traefik-name
+    app.kubernetes.io/instance: traefik-instance
     app.kubernetes.io/version: "v3.2.0"
     app.kubernetes.io/managed-by: Helm
 spec:
-  type: LoadBalancer # можно использовать NodePort, если у вас нет возможности использовать LoadBalancer
+  type: LoadBalancer # или NodePort
+#  externalTrafficPolicy: Local
+  externalIPs:
+    - 198.51.100.32
   ports:
     - name: web
       port: 80
@@ -20,4 +23,5 @@ spec:
       targetPort: 443
       protocol: TCP
   selector:
-    app.kubernetes.io/name: traefik
+    app.kubernetes.io/name: traefik-name
+    app.kubernetes.io/instance: traefik-instance
