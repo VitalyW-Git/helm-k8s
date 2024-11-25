@@ -46,8 +46,8 @@ spec:
             - "--entrypoints.traefik.address=:9000/tcp"
             - "--entrypoints.web.address=:80/tcp"  # Определяет entrypoint для HTTP
             - "--entrypoints.websecure.address=:443/tcp"  # Определяет entrypoint для HTTPS (если будет настройка в будущем)
-          volumes:
-            - name: data
-              emptyDir: {}
-            - name: tmp
-              emptyDir: {}
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}

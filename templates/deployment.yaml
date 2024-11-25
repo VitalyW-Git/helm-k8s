@@ -31,8 +31,10 @@ spec:
               mountPath: /app
       volumes:
         - name: app-volume
-          persistentVolumeClaim:
-            claimName: app-volume-claim
+#          persistentVolumeClaim:
+#            claimName: app-volume-claim
+          hostPath:
+            path: /home/home/sites/kub8s/helm-k8s-index
         - name: nginx-config
           configMap:
             name: nginx-config-map
