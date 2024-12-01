@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-dashboard-service
+  labels:
+    app: project-name
+spec:
+  type: ClusterIP
+  selector:
+    app: project-name
+  ports:
+    - port: 9000
+      name: traefik
+      targetPort: traefik
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-ingress-route
+  labels:
+    app: project-name
+spec:
+  entryPoints:
+    - web # http
+    - websecure # https
+  routes:
+    - match: Host(`traefik-dashboard.local`)
+      kind: Rule
+#      middlewares:
+#        - name: auth
+      # - name: redirectscheme
+      services:
+        - name: api@internal
+          kind: TraefikService
+#  tls:
+#    certResolver: letsencrypt # раздел будет доступен через https

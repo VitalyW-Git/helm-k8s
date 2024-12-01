@@ -7,6 +7,7 @@ spec:
   ports:
     - port: 9000
       targetPort: 9000
+      protocol: TCP
   selector:
     app: php-multiple-container
 ---
@@ -19,14 +20,15 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30001  # Укажите нужный вам порт для доступа
+      protocol: TCP
+#      nodePort: 30001  # Укажите нужный вам порт для доступа
   selector:
     app: php-multiple-container
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: ingress-route
+  name: test-ingress-route
 spec:
   entryPoints:
     - web
@@ -36,3 +38,17 @@ spec:
       services:
         - name: nginx-service
           port: 80
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: IngressClass
+#metadata:
+#  annotations:
+#    ingressclass.kubernetes.io/is-default-class: "true"
+#  labels:
+#    app.kubernetes.io/name: traefik
+#    app.kubernetes.io/instance: devmoydom-default
+#    helm.sh/chart: traefik-21.2.0
+#    app.kubernetes.io/managed-by: Helm
+#  name: devmoydom-traefik
+#spec:
+#  controller: traefik.io/ingress-controller

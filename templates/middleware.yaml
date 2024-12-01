@@ -1,0 +1,59 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: auth
+  labels:
+    app: project-name
+spec:
+  basicAuth:
+    secret: admin-auth
+#---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: Middleware
+#metadata:
+#  name: redirectscheme
+#spec:
+#  redirectScheme:
+#    scheme: https
+#    permanent: true
+#    port: "443"
+#---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: http-catch-all
+#  labels:
+#    app: project-name
+#spec:
+#  entryPoints:
+#    - web
+#    - websecure
+#  routes:
+#    - match: HostRegexp(`{any:.+}`)
+#      # - match: HostRegexp(`{host:.+}`)
+#      kind: Rule
+#      services:
+#        - name: api@internal
+#          kind: TraefikService
+#          port: 80
+#      middlewares:
+#        - name: redirectscheme
+#          namespace: traefik #case the Middleware has distinct namespace
+#---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: IngressRoute
+#metadata:
+#  name: traefik-metrics
+#  labels:
+#    app: project-name
+#spec:
+#  entryPoints:
+#    - web  # используем HTTP entry point
+#  routes:
+#    - match: Host(`traefik-dashboard.local`) && Path(`/metrics`)
+#      kind: Rule
+#      services:
+#        - name: prometheus@internal
+#          kind: TraefikService
+#      middlewares:
+#        - name: auth  # добавьте эту строку, если хотите аутентификацию
